@@ -1,39 +1,53 @@
-# Chacha Web Services
+# CWS — Chacha Web Services
 
-CWS website and connected project workspace, based on [the product requirements](docs/PRD.md) and the CWS Master Plan. The supplied **logo 3** is used unchanged. Forest green and ivory remain the primary palette, with restrained gold from the logo.
+A public business website built with React and Vite. The current version has **no CWS backend, database connection, accounts, login or dashboards**. Visitors browse services, send an inquiry or request a meeting. FormSubmit delivers form submissions to `project@cws.com` after inbox activation.
 
-## Run locally
-
-Requires Node.js 24 or newer.
+## Run and build
 
 ```sh
 npm ci
-cp .env.example .env
 npm run dev
+npm run build
 ```
 
-On PowerShell use `Copy-Item .env.example .env`. Open `http://localhost:5173`. The API runs on port 3001. The application reads `.env` automatically. Persistent SQLite records and private uploads live under `DATA_DIR` (default `data/`), which is excluded from Git.
+The local site is at `http://localhost:5173`. Deploy the contents of `dist/` to a static host with SPA fallback to `index.html`. No Node application server, SMTP secrets or persistent volume are required. `npm start` previews the compiled files locally; it is not a production application server. An optional Docker image serves only the compiled files with Nginx on port 80.
 
-For local sign-in testing only, set `DEV_AUTH_LINKS=true` in `.env`. The sign-in screen then exposes a development link. Production ignores this flag. Set `ADMIN_EMAILS` to the owner email to grant administrator access after verification. Do not ship test identities or seed customer records.
+Use Node 24+ for development and the optional archival backup command. Fonts and photographs are served locally.
 
-## Included in this first implementation
+## Pages
 
-- Responsive marketing pages: homepage, all twelve services, concept work and detail views, process, four packages, about, FAQ and contact.
-- Eight-step configurator with local non-contact draft saving, validation, file quarantine, explicit quote-request behavior, durable submission and printable reference.
-- Atomic lead/order/project creation, idempotent submission handling and a persistent email outbox.
-- Verified email-link sign-in, expiring HTTP-only sessions, client ownership checks and a protected admin role.
-- Client project overview, brief, files, messages, version-specific approvals, invoices, service records and support tickets.
-- Admin projects, milestone updates, design review links, invoice creation, verified manual payment records, domain/hosting/maintenance records, inquiries, orders and notification status.
-- Security headers, same-origin mutation checks, request limits, parameterized SQL and an audit log for core sensitive operations.
-- API integration tests, desktop/mobile browser tests and GitHub Actions checks.
+Home, twelve services, solution examples, pricing, process, About, FAQs, contact, project inquiry, meeting request, privacy and service information. The About page includes CWS’s purpose, connected design/software/AI approach, six guiding principles and delivery process.
 
-## Production setup
+Workflow Automation has been replaced by AI Agents & Automation. The old URL redirects to the new service. Legacy login, signup, verification, portal, admin and preview URLs redirect to Contact. There are no links offering an account or dashboard.
 
-Build with `npm run build` and run `npm start`. The Node server serves both the compiled site and API. A Dockerfile is included. Use one application instance with a persistent disk for SQLite and uploads, behind HTTPS; this release is not designed for ephemeral/serverless filesystems or multiple database writers on separate hosts.
+## Form delivery: activation required
 
-Set `APP_ORIGIN` to the exact public HTTPS origin, `NODE_ENV=production`, `ADMIN_EMAILS`, SMTP host/port/user/password, `MAIL_FROM` and `STAFF_EMAIL`. Keep secrets outside Git. Configure backups and monitor `/api/health`. Reverse proxy trust settings must be reviewed for the actual deployment; the app does not blindly trust forwarded IP headers.
+The inquiry, contact and meeting forms use `https://formsubmit.co/ajax/project@cws.com`. No email-service password or secret API key is placed in the frontend.
 
-No production hosting or email account has been connected by this change. No live payments, domain registration or hosting purchases are performed. Do not publish before completing [launch readiness](docs/IMPLEMENTATION-STATUS.md).
+Before accepting live inquiries:
+
+1. Open the website over HTTP/HTTPS and submit a clearly labelled setup inquiry.
+2. Open `project@cws.com` and confirm the activation email from FormSubmit. Check spam/junk if necessary.
+3. Submit another test inquiry and verify its arrival, all fields and the reply-to address.
+4. Submit a meeting request and verify its preferred date, local time and named time zone.
+
+[FormSubmit setup instructions](https://formsubmit.co/) and [AJAX documentation](https://formsubmit.co/ajax-documentation).
+
+This repository configures delivery but cannot confirm mailbox ownership or receipt. Automated tests mock the provider; no live delivery is claimed. The UI reports acceptance only when the provider explicitly returns success. Network, HTTP, malformed-response and activation failures keep the input and show an error with a direct-email alternative. Provider acceptance is not a guarantee of inbox receipt.
+
+Spam controls include a honeypot and provider filtering. AJAX does not provide an interactive CAPTCHA here. Monitor the mailbox/provider filtering and choose a stronger hosted spam-control option if necessary. Form submissions are not persisted in browser storage or a CWS database. Public forms do not accept files or passwords.
+
+## Meeting requests
+
+The default page collects name, email, optional company/phone, service, preferred date/time/time zone, alternative times and discussion topic. It clearly states that the appointment is pending confirmation. CWS replies by email with availability and the meeting link.
+
+If an actual scheduling service is available, set `VITE_MEETING_URL` to its HTTPS booking URL and rebuild. The page will add an external calendar link while retaining the meeting-request form. This value is public and must not contain a private access token. No scheduling link has been supplied, so the request form is the active option.
+
+## Preserved data and retired backend
+
+The previous implementation is recoverable from Git commit `5a424e6`. Before retirement, an integrity-checked SQLite backup was created at `data/backups/cws-2026-09-29T23-25-57-412Z.sqlite`. Original database files and uploads remain under ignored `data/`; configuration was preserved as `data/retired-backend.env`. None of these files is included in the static build or committed to Git.
+
+The backend modules, API proxy, dashboard/auth components and server dependencies have been removed from the current source. `npm run archive:backup` is an optional local recovery tool for the preserved database, not part of website runtime. Documentation under `docs/history/` records the retired architecture and is not the current deployment guide.
 
 ## Validation
 
@@ -43,16 +57,6 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-Browser tests start the development server with an isolated `data/e2e` database and development-only sign-in. On Windows you can set `PLAYWRIGHT_EXECUTABLE_PATH` to an installed Chromium browser path. Do not point test configuration at production data.
+Browser tests launch only Vite, use simulated email-provider responses and check public navigation, retired routes, form acceptance/error handling, meeting details, mobile layout, imagery and clickable cards. On Windows, `PLAYWRIGHT_EXECUTABLE_PATH` can select an installed Edge/Chromium executable.
 
-## Scope and assets
-
-This is a working first implementation, **not the complete commercial launch in the PRD**. Detailed omissions and deployment requirements are listed in [implementation status](docs/IMPLEMENTATION-STATUS.md). Public policy pages are explicitly marked pre-launch drafts. Portfolio compositions are original visual concepts and are labeled accordingly. The four marketing figures are owner-supplied content, not metrics calculated by this software.
-
-The user-supplied logo remains in `public/brand/cws-logo.png`. Typography is self-hosted using the Manrope package. Website mockups are original CSS compositions, not screenshots of claimed client projects.
-
-## Workspace and database operations
-
-Client dashboard: `/portal`. Admin dashboard: `/admin`. See `docs/WORKSPACE.md` for access configuration, permissions and backup/restore steps.
-
-Run `npm run db:init` to apply migrations and check database integrity. Run `npm run db:backup` for a verified timestamped database snapshot. Do not set `NODE_ENV=development` in a Vite production build environment; set `NODE_ENV=production` when running the deployed server.
+The original PRD and historical documents reflect earlier scope. This README and `docs/PUBLIC-WEBSITE.md` describe the approved public-only version. No public production deployment is included.
