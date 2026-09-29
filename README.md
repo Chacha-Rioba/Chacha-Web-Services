@@ -50,3 +50,9 @@ Browser tests start the development server with an isolated `data/e2e` database 
 This is a working first implementation, **not the complete commercial launch in the PRD**. Detailed omissions and deployment requirements are listed in [implementation status](docs/IMPLEMENTATION-STATUS.md). Public policy pages are explicitly marked pre-launch drafts. Portfolio compositions are original visual concepts and are labeled accordingly. The four marketing figures are owner-supplied content, not metrics calculated by this software.
 
 The user-supplied logo remains in `public/brand/cws-logo.png`. Typography is self-hosted using the Manrope package. Website mockups are original CSS compositions, not screenshots of claimed client projects.
+
+## Workspace and database operations
+
+Client dashboard: `/portal`. Admin dashboard: `/admin`. See `docs/WORKSPACE.md` for access configuration, permissions and backup/restore steps.
+
+Run `npm run db:init` to apply migrations and check database integrity. Run `npm run db:backup` for a verified timestamped database snapshot. Do not set `NODE_ENV=development` in a Vite production build environment; set `NODE_ENV=production` when running the deployed server.

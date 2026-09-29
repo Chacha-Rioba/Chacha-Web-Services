@@ -38,3 +38,7 @@ The portal has project status/progress, brief, quarantined files, design approva
 - Visual inspection of the homepage and mobile configurator.
 
 GitHub CI runs the build and automated tests on Node 24. Deployment approval is separate from merging implementation work.
+
+## Dashboard expansion
+
+See `WORKSPACE.md` for the database-backed client/admin dashboards, client directory, tasks, scheduling, staff notes, threaded support, billing overview, profile editing, session revocation and backup command. Design approvals are now client-only. Migration 1 is applied without replacing existing records. The AWS-reference public design supersedes the original homepage narrative described above. Real email delivery, payment processing, file scanning and verified launch remain pending integrations.

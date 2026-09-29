@@ -1,3 +1,4 @@
+import {migrateWorkspace} from './migrations.js';
 import { DatabaseSync } from 'node:sqlite';
 import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -25,5 +26,6 @@ export function openStore(dir) {
     CREATE TABLE IF NOT EXISTS audit(id INTEGER PRIMARY KEY AUTOINCREMENT,actor TEXT NOT NULL,action TEXT NOT NULL,entity TEXT NOT NULL,details TEXT NOT NULL,created TEXT NOT NULL);
   `);
   if(!db.prepare('PRAGMA table_info(projects)').all().some(c=>c.name==='checks'))db.exec("ALTER TABLE projects ADD COLUMN checks TEXT NOT NULL DEFAULT '[]'");
+  migrateWorkspace(db);
   return db;
 }

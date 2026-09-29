@@ -12,7 +12,9 @@
     "start": "node --env-file-if-exists=.env server/index.js",
     "test": "node --test tests/*.test.js",
     "test:e2e": "playwright test",
-    "check": "npm run test && npm run build"
+    "check": "npm run test && npm run build",
+    "db:backup": "node --env-file-if-exists=.env scripts/backup.mjs",
+    "db:init": "node --env-file-if-exists=.env scripts/database.mjs"
   },
   "dependencies": {
     "@fontsource/manrope": "^5.3.0",
