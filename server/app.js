@@ -51,11 +51,18 @@ export function createApp(config={}) {
     enqueue(email,'Your CWS sign-in link',`Use this single-use link within 15 minutes to sign in to Chacha Web Services:\n${link}\nIf you did not request it, ignore this email.`);
     res.json({message:'Check your email for a secure sign-in link.',...(devLinks?{developmentLink:link}:{})});
   });
+  app.post('/api/auth/signup',limiter(8),(req,res)=>{
+    const v=z.object({name:z.string().trim().min(2).max(100),email:z.string().trim().email().max(254).transform(v=>v.toLowerCase())}).parse(req.body);
+    if(!mailReady&&!devLinks)throw fail(503,'Secure email verification is not configured yet. Please contact CWS.');
+    const token=randomBytes(32).toString('hex'),digest=hash(token),link=origin+'/verify#token='+token;
+    db.exec('BEGIN IMMEDIATE');try{stmt('INSERT INTO tokens VALUES(?,?,?)').run(digest,v.email,Date.now()+15*60*1000);stmt('INSERT INTO registrations VALUES(?,?)').run(digest,v.name);enqueue(v.email,'Verify your CWS account','Verify your email within 15 minutes to activate your account: '+link);db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}
+    res.json({message:'Check your email to verify your account.',...(devLinks?{developmentLink:link}:{})});
+  });
   app.post('/api/auth/verify',limiter(30),(req,res)=>{
     const {token}=z.object({token:z.string().regex(/^[a-f0-9]{64}$/)}).parse(req.body);
     const record=stmt('SELECT * FROM tokens WHERE hash=? AND expires>?').get(hash(token),Date.now());if(!record)throw fail(400,'This link has expired or was already used. Request another link.');
     db.exec('BEGIN IMMEDIATE');
-    try{stmt('DELETE FROM tokens WHERE hash=?').run(hash(token));stmt('INSERT OR IGNORE INTO users VALUES(?,?,?,?)').run(id(),record.email,record.email.split('@')[0],now());db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}
+    try{const registration=stmt('SELECT name FROM registrations WHERE token_hash=?').get(hash(token));stmt('DELETE FROM registrations WHERE token_hash=?').run(hash(token));stmt('DELETE FROM tokens WHERE hash=?').run(hash(token));stmt('INSERT OR IGNORE INTO users VALUES(?,?,?,?)').run(id(),record.email,registration?.name||record.email.split('@')[0],now());db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}
     const user=stmt('SELECT * FROM users WHERE email=?').get(record.email),session=randomBytes(32).toString('hex');
     stmt('INSERT INTO sessions VALUES(?,?,?)').run(hash(session),user.id,Date.now()+7*86400000);
     res.setHeader('Set-Cookie',`cws_session=${session}; HttpOnly; SameSite=Lax; Path=/; Max-Age=604800${production?'; Secure':''}`);

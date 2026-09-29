@@ -4,24 +4,72 @@ export const styles = ['Minimal', 'Corporate', 'Luxury', 'Bold', 'Creative', 'Te
 export const stages = ['Your Business', 'Website Type', 'Website Requirements', 'Design Direction', 'Branding', 'Content', 'Domain & Hosting', 'Review & Submit'];
 export const projectStates = ['New', 'Assigned', 'Designing', 'Development', 'Client Review', 'Changes', 'Ready', 'Live', 'On hold', 'Cancelled'];
 export const services = [
-  ['Brand identity', 'A distinctive first impression.', 'Logo concepts, a considered color system, typography and clear brand direction.', 'PenTool'],
-  ['Website design', 'Designed around your business.', 'Thoughtful wireframes and refined interfaces, across desktop, tablet and mobile.', 'PanelsTopLeft'],
-  ['Development', 'Beautiful outside. Capable inside.', 'Responsive business websites, landing pages, portfolios and blogs.', 'Code2'],
-  ['E-commerce', 'Turn browsing into buying.', 'Product catalogs, carts, checkout, payments and order management.', 'ShoppingBag'],
-  ['Custom applications', 'Built for the way you work.', 'Portals, dashboards, marketplaces, booking systems and business tools.', 'Blocks'],
-  ['Content creation', 'The right words for your website.', 'Headlines, website copy and product or service descriptions.', 'FileText'],
-  ['Graphics & assets', 'Every detail belongs.', 'Banners, icons and launch graphics that work with your identity.', 'Shapes'],
-  ['Domains & hosting', 'A home for your business online.', 'Domain assistance, DNS, hosting, SSL and deployment.', 'Globe'],
-  ['Business email', 'Make every message professional.', 'Email setup on your domain, with clearly scoped mailbox and migration needs.', 'Mail'],
-  ['Payments & integrations', 'Bring your tools together.', 'M-Pesa, cards, WhatsApp, maps, CRM and third-party services.', 'Workflow'],
-  ['SEO & analytics', 'Be found. Understand what works.', 'Technical SEO, metadata, sitemaps and conversion measurement.', 'ChartNoAxesCombined'],
-  ['Maintenance & support', 'Look after what you’ve built.', 'Updates, backups, monitoring, fixes and ongoing technical assistance.', 'ShieldCheck'],
+  [
+    "Website design & development",
+    "Your strongest first impression.",
+    "Fast, expressive websites with clear journeys from first visit to inquiry."
+  ],
+  [
+    "Web applications",
+    "Turn your idea into a working product.",
+    "Customer portals, subscriptions and browser-based tools built around your users."
+  ],
+  [
+    "E-commerce",
+    "Make your next sale online.",
+    "Product discovery, inventory, checkout and payment connections for your store."
+  ],
+  [
+    "Business systems",
+    "Give your team a better way to work.",
+    "Internal dashboards, records and approval flows tailored to daily operations."
+  ],
+  [
+    "Mobile experiences",
+    "Meet customers on their screen.",
+    "Responsive products and scoped mobile application projects, from prototype to release."
+  ],
+  [
+    "Payments & integrations",
+    "Connect the tools behind your business.",
+    "M-Pesa, payment providers, messaging and external APIs brought into one customer journey."
+  ],
+  [
+    "UX & product design",
+    "Make every interaction count.",
+    "User journeys, interactive prototypes and interfaces tested against real tasks."
+  ],
+  [
+    "Workflow automation",
+    "Make repetitive work run smoother.",
+    "Lead routing, notifications and connected business workflows with clear controls."
+  ],
+  [
+    "Branding & creative",
+    "Build a brand people recognize.",
+    "Logo design, visual identity, website copy and campaign-ready graphic assets."
+  ],
+  [
+    "SEO & digital growth",
+    "Help the right customers find you.",
+    "Search foundations, content planning and analytics to understand your next opportunity."
+  ],
+  [
+    "Cloud, domains & email",
+    "Put your business on solid foundations.",
+    "Domain setup, deployment, hosting and professional email with agreed ownership and renewals."
+  ],
+  [
+    "Maintenance & support",
+    "Keep moving after launch.",
+    "Updates, backups, monitoring and improvements through a scoped support plan."
+  ]
 ];
 export const packages = [
-  { name: 'CWS Start', tagline: 'Your first step online.', items: ['A focused professional website', 'Responsive design', 'Contact & WhatsApp integration', 'Launch and deployment'], label: 'A strong beginning' },
-  { name: 'CWS Business', tagline: 'Room for your business to grow.', items: ['Expanded pages & features', 'Branding & design direction', 'SEO & analytics setup', 'Domain & hosting setup'], label: 'The complete presence' },
-  { name: 'CWS Commerce', tagline: 'Open for business. Everywhere.', items: ['Product catalog & cart', 'Checkout & payments', 'Order management', 'A scoped launch timeline'], label: 'Made for selling' },
-  { name: 'CWS Custom', tagline: 'Your ambition, engineered.', items: ['Portals & dashboards', 'Marketplaces & SaaS', 'Custom integrations', 'Discovery & tailored delivery'], label: 'Beyond the ordinary' },
+  { name: 'Launch Presence', tagline: 'Your first step online.', items: ['A focused professional website', 'Responsive design', 'Contact & WhatsApp integration', 'Launch and deployment'], label: 'A strong beginning' },
+  { name: 'Business Growth', tagline: 'Room for your business to grow.', items: ['Expanded pages & features', 'Branding & design direction', 'SEO & analytics setup', 'Domain & hosting setup'], label: 'The complete presence' },
+  { name: 'Commerce Engine', tagline: 'Open for business. Everywhere.', items: ['Product catalog & cart', 'Checkout & payments', 'Order management', 'A scoped launch timeline'], label: 'Made for selling' },
+  { name: 'Custom Platform', tagline: 'Your ambition, engineered.', items: ['Portals & dashboards', 'Marketplaces & SaaS', 'Custom integrations', 'Discovery & tailored delivery'], label: 'Beyond the ordinary' },
 ];
 export const faq = [
   ['Can my website really go live in five hours?', 'The fast-delivery service applies to eligible standard websites once your scope, assets, required payment and delivery slot are confirmed. Commerce, custom applications and complex integrations receive their own timeline.'],

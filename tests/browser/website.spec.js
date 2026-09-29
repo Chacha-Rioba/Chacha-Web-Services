@@ -21,3 +21,12 @@ test('eight-step brief saves a real project and verified client can find it',asy
  await page.getByRole('link',{name:'Go to your project portal'}).click();await page.getByLabel('Email address').fill(email);await page.getByRole('button',{name:'Email my sign-in link'}).click();await page.getByRole('link',{name:'Development only: open sign-in link'}).click();
  await expect(page.getByRole('heading',{name:'Your next chapter.',exact:true})).toBeVisible();await page.getByRole('button').filter({hasText:'Browser Test Studio'}).click();await expect(page.getByRole('heading',{name:'Your brief is being reviewed.'})).toBeVisible();
 });
+
+test('signup verifies an email and opens a client workspace',async({page})=>{
+ await page.goto('/signup');await page.getByLabel('Your name',{exact:true}).fill('New CWS Client');await page.getByLabel('Email address').fill(`signup-${Date.now()}@example.test`);await page.getByRole('button',{name:'Create account',exact:true}).click();await expect(page.getByRole('status')).toContainText('verify your account');await page.getByRole('link',{name:'Development only: open sign-in link'}).click();await expect(page.getByRole('heading',{name:'Your next chapter.',exact:true})).toBeVisible();
+});
+
+test('photographs load, service cards navigate and WhatsApp uses CWS number',async({page})=>{
+ await page.goto('/');for(const img of await page.locator('img').all()){await img.scrollIntoViewIfNeeded();await expect.poll(()=>img.evaluate(x=>x.complete&&x.naturalWidth>0)).toBe(true)}
+ await expect(page.locator('a[href="https://wa.me/254710885507"]').first()).toBeVisible();await page.locator('.service-card').first().click();await expect(page.getByRole('heading',{level:1})).toHaveText('Website design & development');
+});
