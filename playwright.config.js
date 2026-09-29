@@ -1,0 +1,2 @@
+import { defineConfig } from '@playwright/test';
+export default defineConfig({testDir:'./tests/browser',workers:1,use:{baseURL:'http://localhost:5174',launchOptions:process.env.PLAYWRIGHT_EXECUTABLE_PATH?{executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH}:{},trace:'retain-on-failure'},webServer:{command:'npm run dev',url:'http://localhost:5174',reuseExistingServer:false,env:{DEV_AUTH_LINKS:'true',DATA_DIR:'./data/e2e-'+Date.now(),APP_ORIGIN:'http://localhost:5174',PORT:'3002',VITE_PORT:'5174',VITE_API_TARGET:'http://127.0.0.1:3002'}}});
