@@ -2,7 +2,7 @@ export const types = ['Corporate', 'E-commerce', 'Portfolio', 'Restaurant', 'Rea
 export const features = ['Contact form', 'WhatsApp', 'M-Pesa', 'Card payments', 'Booking', 'Maps', 'Blog', 'Analytics', 'SEO', 'Customer accounts', 'Multilingual'];
 export const styles = ['Minimal', 'Corporate', 'Luxury', 'Bold', 'Creative', 'Technology', 'Dark', 'Elegant'];
 export const stages = ['Your Business', 'Website Type', 'Website Requirements', 'Design Direction', 'Branding', 'Content', 'Domain & Hosting', 'Review & Submit'];
-export const projectStates = ['New', 'Assigned', 'Designing', 'Development', 'Client Review', 'Changes', 'Ready', 'Live', 'On hold', 'Cancelled'];
+export const projectStates = ['New', 'Assigned', 'Designing', 'Development', 'Client Review', 'Changes', 'Ready', 'Completed', 'Live', 'On hold', 'Cancelled'];
 export const services = [
   [
     "Website design & development",

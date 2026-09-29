@@ -16,7 +16,7 @@ The site continues to support project messages, invoices/manual payments, design
 
 ## Database
 
-SQLite with WAL and foreign keys, stored in `DATA_DIR/cws.sqlite` (`data/cws.sqlite` by default). Migrations run automatically at startup and can also run with `npm run db:init`. Migration 1 adds profiles, project scheduling, tasks, internal notes, ticket replies and indexed lookup paths. Existing project and financial records are retained. Money is stored as integer minor units; currencies are never added together in dashboard balances.
+SQLite with WAL and foreign keys, stored in `DATA_DIR/cws.sqlite` (`data/cws.sqlite` by default). Migrations run automatically at startup and can also run with `npm run db:init`. Migration 1 adds profiles, project scheduling, tasks, internal notes, ticket replies and indexed lookup paths. Migration 2 adds invoice due dates, version checks and reporting indexes. Existing project and financial records are retained. Money is stored as integer minor units; currencies are never added together in dashboard balances.
 
 `npm run db:backup` uses SQLite's online backup API and opens the snapshot for an integrity check. Snapshots are timestamped in `DATA_DIR/backups`. Restrict filesystem access and copy backups to an appropriate protected off-device location in production. This command does not schedule backups or copy uploaded files.
 
@@ -32,8 +32,12 @@ Deployment remains a single application host with persistent storage; horizontal
 
 ## Photography
 
-Added locally served Unsplash photos of collaboration, a team at laptops and product photography: `photo-1516321318423-f06f85e504b3`, `photo-1522071820081-009f0129c71c`, `photo-1542291026-7eec264c27ff`. Images appear in homepage feature/story sections and introductions for services, packages, process, work, about and contact. These are illustrative photographs, not claims of CWS staff or client work.
+Public pages use locally served, service-specific Unsplash photography. The former shoe image has been removed. See `BRAND-ASSETS.md` for the updated source inventory; these are illustrative photographs, not claims of CWS staff or client work.
 
 ## Validation
 
 API suites cover ownership isolation, admin denial, staff-note privacy, task role restrictions, stale schedule/task writes, invalid dates, support ownership and reopening, profile persistence, grouped currencies, session revocation, client-only approval, migrations and reopen integrity. Browser coverage includes authenticated admin/client workflows and mobile overflow checks, alongside the existing website and brief flows. Dashboard screenshots use isolated sample data, never seeded into the live preview database.
+
+## CRM refinement
+
+Analytics, client account profiles, project filters, finance charts and exports are documented in `CRM-REFINEMENT.md`. Use `/preview/admin` for the public interactive sample, `/admin` for authenticated database records. Client previews remain at `/preview/client`.

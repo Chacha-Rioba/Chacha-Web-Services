@@ -16,10 +16,10 @@ The portal has project status/progress, brief, quarantined files, design approva
 4. Connect file malware scanning and authorized downloads. Uploads are validated and quarantined, never publicly served. DOCX/SVG and post-submission uploads are not yet enabled. This intentionally keeps unscanned assets inaccessible.
 5. Add the complete quote/version/acceptance workflow, priced catalog, taxes, revision allowances and payment provider. The current experience explicitly requests a quote and supports invoice records and verified manual payments. It does not process cards or M-Pesa.
 6. Complete the delivery readiness checklist, durable clock/pause events and verified launch workflow. Live status is locked at the API until these exist. Current progress is calculated from staff-selected completed milestones; full applicability/weight scheduling is pending.
-7. Add staff assignment, finance/owner role separation, multifactor authentication, account revocation UI and content publishing/rollback. Current production access has client and configured administrator roles only. Review approval authorization to restrict final approval to the designated client signatory.
+7. Add finance/owner role separation, multifactor authentication and content publishing/rollback. Project owner assignment and other-session revocation are implemented. Current production access has client and configured administrator roles only. Review approval authorization to restrict final approval to the designated client signatory.
 8. Complete subscription billing, renewals, reminders, cancellation and provider reconciliation. Domain, hosting, email and maintenance information is recorded manually; no provisioning is implied.
 9. Add server pagination, analytics/consent integration, published knowledge base, search metadata per page, canonical URLs, sitemap/social previews and production performance/accessibility audits.
-10. Finish message retry idempotency, secure file removal and expiry cleanup, downloadable invoices/quotes, ticket conversation/reopen policies, and retention/deletion operations.
+10. Finish message retry idempotency, secure file removal and expiry cleanup, downloadable invoices/quotes and retention/deletion operations. Threaded support and reopening are implemented.
 
 ## Deliberate first-release boundaries
 
@@ -42,3 +42,7 @@ GitHub CI runs the build and automated tests on Node 24. Deployment approval is 
 ## Dashboard expansion
 
 See `WORKSPACE.md` for the database-backed client/admin dashboards, client directory, tasks, scheduling, staff notes, threaded support, billing overview, profile editing, session revocation and backup command. Design approvals are now client-only. Migration 1 is applied without replacing existing records. The AWS-reference public design supersedes the original homepage narrative described above. Real email delivery, payment processing, file scanning and verified launch remain pending integrations.
+
+## CRM and public website refinement
+
+See `CRM-REFINEMENT.md` for filtered analytics, client profiles/read-only account previews, project status and payment drilldowns, per-currency finance charts/exports, historical snapshots, invoice due dates and migration 2. Public pages now use service-specific editorial content and distinct photography, uniform clickable pricing cards, a navy/blue logo and WhatsApp-only public contact labels. `BRAND-ASSETS.md` records the assets. Public previews remain fictional and separate from protected account data.

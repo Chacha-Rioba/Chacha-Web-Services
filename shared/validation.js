@@ -1,9 +1,10 @@
 import { z } from 'zod';
-import { types, features, styles, packages } from './catalog.js';
+import { types, features, styles, packages, services } from './catalog.js';
 const text = (min, max) => z.string().trim().min(min).max(max);
 export const businessSchema = z.object({ name: text(2,120), industry: text(2,100), description: text(20,2000), city: text(2,100), country: text(2,100), contactName: text(2,100), email: z.string().trim().email().max(254).transform(v=>v.toLowerCase()), phone: z.string().max(30).default(''), website: z.union([z.literal(''), z.string().url().refine(v=>/^https?:\/\//.test(v),'Use an HTTP or HTTPS address')]).default('') });
 export const briefSchema = z.object({
   business: businessSchema,
+  service: z.enum(services.map(s=>s[0])).optional(),
   websiteType: z.enum(types),
   package: z.enum(packages.map(p=>p.name)),
   pages: z.array(text(1,60)).min(1).max(20), features: z.array(z.enum(features)).max(11),

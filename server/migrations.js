@@ -1,6 +1,6 @@
 export function migrateWorkspace(db) {
   db.exec(`CREATE TABLE IF NOT EXISTS schema_migrations(version INTEGER PRIMARY KEY, applied_at TEXT NOT NULL);`);
-  if (db.prepare('SELECT 1 FROM schema_migrations WHERE version=1').get()) return;
+  if (!db.prepare('SELECT 1 FROM schema_migrations WHERE version=1').get()) {
   db.exec('BEGIN IMMEDIATE');
   try {
     db.exec(`
@@ -24,4 +24,13 @@ export function migrateWorkspace(db) {
     db.prepare('INSERT INTO schema_migrations VALUES(1,?)').run(new Date().toISOString());
     db.exec('COMMIT');
   } catch(error) { db.exec('ROLLBACK'); throw error; }
+  }
+  if (!db.prepare('SELECT 1 FROM schema_migrations WHERE version=2').get()) {
+    db.exec('BEGIN IMMEDIATE');
+    try {
+      db.exec("ALTER TABLE invoices ADD COLUMN due_date TEXT NOT NULL DEFAULT ''; ALTER TABLE invoices ADD COLUMN version INTEGER NOT NULL DEFAULT 1; CREATE INDEX IF NOT EXISTS payments_created ON payments(created); CREATE INDEX IF NOT EXISTS invoices_created ON invoices(created);");
+      db.prepare('INSERT INTO schema_migrations VALUES(2,?)').run(new Date().toISOString());
+      db.exec('COMMIT');
+    } catch(error) { db.exec('ROLLBACK'); throw error; }
+  }
 }
