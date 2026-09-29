@@ -1,10 +1,10 @@
-const DashboardPreview=React.lazy(()=>import('./DashboardPreview.jsx'));
 import React,{useState,useEffect} from 'react';
 import {createRoot} from 'react-dom/client';
 import {BrowserRouter,Routes,Route,Link,NavLink,useLocation} from 'react-router-dom';
 import {ArrowUpRight,ArrowRight,Menu,X,Globe,Check,ChevronDown,Plus,Minus,MoveUpRight,Layers,Code2,PenTool,ShieldCheck,Clock3,Mail} from 'lucide-react';
 import {services,packages,faq,slug} from '../shared/catalog.js';
 import Builder from './Builder.jsx';
+const DashboardPreview=React.lazy(()=>import('./DashboardPreview.jsx'));
 const Login=React.lazy(()=>import('./Portal.jsx').then(m=>({default:m.Login})));
 const Verify=React.lazy(()=>import('./Portal.jsx').then(m=>({default:m.Verify})));
 const Portal=React.lazy(()=>import('./Portal.jsx').then(m=>({default:m.Portal})));
