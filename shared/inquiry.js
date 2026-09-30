@@ -1,18 +1,19 @@
 export const INBOX='project@cws.com';
 export const FORM_ENDPOINT='https://formsubmit.co/ajax/'+INBOX;
-export const requestKinds=['Project inquiry','General inquiry','Meeting request'];
+export const requestKinds=['Project inquiry','General inquiry','Meeting request','Callback request'];
 export function localDate(d=new Date()){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 export function prepareInquiry(values,kind){
  if(!requestKinds.includes(kind))throw Error('Choose a valid request type.');
  const clean=k=>String(values[k]||'').trim();
  if(clean('_honey'))throw Error('Please leave the website verification field empty.');
  if(clean('name').length<2||clean('name').length>100)throw Error('Please enter your name (2–100 characters).');
- if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean('email'))||clean('email').length>254)throw Error('Please enter a valid email address.');
+ if(clean('email')&&(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean('email'))||clean('email').length>254))throw Error('Please enter a valid email address.');
  if(clean('message').length<20||clean('message').length>4000)throw Error('Please describe your request in 20–4,000 characters.');
  if(values.privacy!=='on')throw Error('Please confirm you have read the privacy notice.');
  const fields={name:clean('name'),email:clean('email'),company:clean('company'),phone:clean('phone'),service:clean('service'),package:clean('package'),message:clean('message')};
  for(const k of ['company','phone','service','package'])if(fields[k].length>150)throw Error('One of the fields is too long. Please shorten it.');
- if(kind==='Meeting request'){
+ if(kind==='Callback request'&&!/^\+[1-9]\d{6,14}$/.test(clean('phone').replace(/[\s()-]/g,'')))throw Error('Enter your callback number with country code, for example +254 followed by your number.');
+ if(kind==='Meeting request'||kind==='Callback request'){
   const date=clean('preferred_date'),time=clean('preferred_time'),zone=clean('time_zone');
   if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||Number.isNaN(Date.parse(date))||new Date(date).toISOString().slice(0,10)!==date||date<localDate())throw Error('Choose today or a future date for your meeting request.');
   if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(time))throw Error('Choose a preferred meeting time.');
@@ -31,4 +32,11 @@ export async function sendInquiry(values,kind,fetcher=fetch){
   if(!response.ok||![true,'true'].includes(data.success))throw Error('The email service did not accept this request. Please try again or email '+INBOX+'.');
   return {accepted:true};
  }catch(error){if(error.message?.includes(INBOX))throw error;throw Error('We could not confirm your submission. Your details are still here. Please try again or email '+INBOX+' directly.');}
+}
+
+export function whatsappInquiry(values,kind){
+ const fields=prepareInquiry(values,kind);
+ const labels={name:'Name',email:'Email',company:'Company',phone:'Callback / phone',service:'Service',package:'Package',preferred_date:'Preferred date',preferred_time:'Preferred time',time_zone:'Time zone',alternative_times:'Alternative times',message:'Request',booking_status:'Scheduling'};
+ const message=['CWS | '+kind,...Object.entries(labels).filter(([key])=>fields[key]).map(([key,label])=>label+': '+fields[key])].join('\n\n');
+ return 'https://wa.me/254710885507?text='+encodeURIComponent(message);
 }

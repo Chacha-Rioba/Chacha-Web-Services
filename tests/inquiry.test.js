@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
-import {prepareInquiry,sendInquiry,FORM_ENDPOINT,localDate} from '../shared/inquiry.js';
+import {prepareInquiry,sendInquiry,FORM_ENDPOINT,localDate,whatsappInquiry} from '../shared/inquiry.js';
 import {services} from '../shared/catalog.js';
 const input={name:'Example Client',email:'client@example.test',company:'Example Ltd',phone:'',service:'AI Agents & Automation',message:'We would like an assistant for our approved knowledge base.',privacy:'on',_honey:''};
 test('email forms validate data and meeting time without creating records',()=>{
@@ -16,4 +16,9 @@ test('only explicit provider acceptance succeeds; failures and activation never 
 });
 test('package is frontend-only, retiring the API and keeping service replacement',()=>{
  const p=JSON.parse(readFileSync(new URL('../package.json',import.meta.url)));assert.ok(!p.dependencies.express);assert.ok(!p.dependencies.nodemailer);assert.ok(!p.scripts.dev.includes('server'));assert.equal(existsSync(new URL('../server/app.js',import.meta.url)),false);assert.ok(services.some(s=>s[0]==='AI Agents & Automation'));assert.ok(!services.some(s=>s[0]==='Workflow automation'));
+});
+
+test('WhatsApp encodes special characters and validates callback details',()=>{
+ const values={...input,email:'',phone:'+254 712 345 678',preferred_date:'2099-01-01',preferred_time:'10:30',time_zone:'Africa/Nairobi',message:'A website for R&D, cafés & shops? Please call.'};
+ const url=new URL(whatsappInquiry(values,'Callback request'));assert.equal(url.origin,'https://wa.me');assert.equal(url.pathname,'/254710885507');assert.ok(url.searchParams.get('text').includes(values.message));assert.ok(url.searchParams.get('text').includes('Africa/Nairobi'));assert.throws(()=>whatsappInquiry({...values,phone:'0712345678'},'Callback request'));assert.throws(()=>whatsappInquiry({...values,phone:''},'Callback request'));
 });

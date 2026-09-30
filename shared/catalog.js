@@ -72,6 +72,6 @@ export const faq = [
   ['Can you design my logo too?', 'Yes. Tell us whether you need a new logo, a refreshed identity or a complete brand identity in your inquiry. Branding is included in the agreed project scope.'],
   ['Do you provide domains and hosting?', 'Yes. We can help with your domain, hosting, SSL and professional email. Ownership, renewals and ongoing costs are made clear in your quote.'],
   ['How much will my website cost?', 'Your package, pages, features and add-ons determine your quote. Until a price is agreed, submitting a brief does not charge you or start paid work.'],
-  ['What happens after I submit?', 'Your inquiry is sent to CWS by email. We reply to discuss your requirements and agree the next steps. No account is required.'],
+  ['What happens after I submit?', 'Continue to WhatsApp, review your prepared message and tap Send. CWS will reply there to discuss your requirements and agree the next steps. Opening WhatsApp alone does not send your request. No account is required.'],
 ];
 export const slug = value => value.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');

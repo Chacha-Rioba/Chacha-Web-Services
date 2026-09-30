@@ -1,27 +1,17 @@
-# Public website refurbishment
+# CWS public website
 
-The approved scope replaces the CWS application with a static marketing and inquiry website. This supersedes the account, CRM and database requirements in the original PRD.
+The current website has no accounts, dashboards, custom backend or database runtime. Earlier database files are preserved locally and excluded from deployment; historical documentation is under docs/history.
 
-## Implemented
+## Current request flow
 
-- Removed backend source, authentication/dashboard components, API proxy and server dependencies. No website actions create accounts, projects, invoices or database records.
-- Preserved the original database/uploads/configuration locally and created an integrity-checked backup before retirement. Git retains the previous implementation at commit 5a424e6.
-- Replaced the eight-stage configurator with a project inquiry form. Contact and meeting forms use the same hosted email integration targeting project@cws.com.
-- Forms include validation, required privacy acknowledgement, honeypot, disabled submit while sending, a timeout, explicit provider-success checking, and retained input after errors. No input is persisted to local storage.
-- Meeting requests contain preferred date/time, IANA time zone, alternative availability and topic. The UI states that booking is not confirmed. An optional HTTPS scheduling URL can be configured later.
-- Replaced Workflow Automation with AI Agents & Automation, with support/knowledge agents, lead qualification, appointment assistance, document workflows, integrations, evaluation and human-review boundaries.
-- Rebuilt About with a photographic hero, purpose and approach, connected capabilities, six principles, delivery process and meeting invitation.
-- Removed decorative directional arrows; carousel navigation uses labelled Previous/Next buttons. Whole-card links and keyboard focus remain.
-- Updated header/footer/homepage/process/FAQs/privacy to remove the CWS account workflow. Existing AI/software offerings may still describe accounts or databases built for clients; that does not offer a CWS account.
+All project, contact, meeting and callback forms prepare WhatsApp messages. Visitors must tap Send in WhatsApp. The website never reports delivery merely because WhatsApp opened. A visible fallback link handles blocked popups; entered details remain available for editing. Email is optional; callback numbers must include a country code. Meeting and callback times are requests pending confirmation, not appointments.
 
-## Email activation and testing boundary
+The email helper for project@cws.com remains inactive until a working inbox is provisioned, activated and delivery-tested. There is no SMTP credential or messaging API token in the frontend.
 
-FormSubmit requires recipient confirmation. Submit a setup inquiry, activate it from project@cws.com, then verify a second inquiry and meeting request arrive. Automated tests use mocked HTTP responses and do not send test emails. Inbox receipt has not been verified.
+## Presentation
 
-A browser-only website cannot send SMTP mail by itself. FormSubmit is the external delivery processor; the CWS site runs no backend. See the README for configuration and deployment.
+The homepage uses existing real stock photography, not generated graphics or a fictional CWS team image. The desktop hero is 276px tall at wide desktop sizes, down from the previous minimum 690px (60% smaller). Mobile reflows to preserve readability. The five-hour offer retains its eligibility note. Header and hero include Request a callback; other service and meeting flows remain available.
 
-## Hosting
+## Validation and deployment
 
-Build command: npm run build. Publish directory: dist. Configure SPA fallback. Nginx and Netlify-style redirect examples are included. The former API is not deployed. Old account routes lead to Contact, and the old automation service URL redirects to AI Agents & Automation.
-
-No production host has been connected or published by this change.
+npm run check builds the site and checks request helpers. npm run test:e2e checks the UI with WhatsApp opening intercepted; tests send no messages. Use Node 24, build command npm run build, publish directory dist and the included SPA redirects. This update does not confirm a live Netlify deployment or message receipt.

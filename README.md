@@ -1,6 +1,6 @@
 # CWS — Chacha Web Services
 
-A public business website built with React and Vite. The current version has **no CWS backend, database connection, accounts, login or dashboards**. Visitors browse services, send an inquiry or request a meeting. FormSubmit delivers form submissions to `project@cws.com` after inbox activation.
+A public business website built with React and Vite. The current version has **no CWS backend, database connection, accounts, login or dashboards**. Visitors browse services, send an inquiry or request a meeting. All request forms currently prepare WhatsApp messages. Visitors must tap Send in WhatsApp; opening the app does not send a request.
 
 ## Run and build
 
@@ -16,32 +16,17 @@ Use Node 24+ for development and the optional archival backup command. Fonts and
 
 ## Pages
 
-Home, twelve services, solution examples, pricing, process, About, FAQs, contact, project inquiry, meeting request, privacy and service information. The About page includes CWS’s purpose, connected design/software/AI approach, six guiding principles and delivery process.
+Home, twelve services, solution examples, pricing, process, About, FAQs, contact, project inquiry, meeting request, callback request, privacy and service information. The About page includes CWS’s purpose, connected design/software/AI approach, six guiding principles and delivery process.
 
 Workflow Automation has been replaced by AI Agents & Automation. The old URL redirects to the new service. Legacy login, signup, verification, portal, admin and preview URLs redirect to Contact. There are no links offering an account or dashboard.
 
-## Form delivery: activation required
+## Requests via WhatsApp
 
-The inquiry, contact and meeting forms use `https://formsubmit.co/ajax/project@cws.com`. No email-service password or secret API key is placed in the frontend.
+Project inquiries, contact queries, meetings and callback requests prepare a URL-encoded message for WhatsApp CWS. The visitor must tap Send in WhatsApp. Opening WhatsApp is not delivery confirmation. If a new tab is blocked, the page provides an explicit Open WhatsApp CWS link and preserves form values. Editing clears the old prepared link. No request is stored in a CWS database or local storage.
 
-Before accepting live inquiries:
+The callback page is /request-a-callback and is linked prominently from the header and homepage. It requires a name, international phone number, date, time, IANA timezone and discussion topic; email is optional. Meetings and callbacks require confirmation by CWS. Privacy acknowledgement and field validation are required before preparing the message.
 
-1. Open the website over HTTP/HTTPS and submit a clearly labelled setup inquiry.
-2. Open `project@cws.com` and confirm the activation email from FormSubmit. Check spam/junk if necessary.
-3. Submit another test inquiry and verify its arrival, all fields and the reply-to address.
-4. Submit a meeting request and verify its preferred date, local time and named time zone.
-
-[FormSubmit setup instructions](https://formsubmit.co/) and [AJAX documentation](https://formsubmit.co/ajax-documentation).
-
-This repository configures delivery but cannot confirm mailbox ownership or receipt. Automated tests mock the provider; no live delivery is claimed. The UI reports acceptance only when the provider explicitly returns success. Network, HTTP, malformed-response and activation failures keep the input and show an error with a direct-email alternative. Provider acceptance is not a guarantee of inbox receipt.
-
-Spam controls include a honeypot and provider filtering. AJAX does not provide an interactive CAPTCHA here. Monitor the mailbox/provider filtering and choose a stronger hosted spam-control option if necessary. Form submissions are not persisted in browser storage or a CWS database. Public forms do not accept files or passwords.
-
-## Meeting requests
-
-The default page collects name, email, optional company/phone, service, preferred date/time/time zone, alternative times and discussion topic. It clearly states that the appointment is pending confirmation. CWS replies by email with availability and the meeting link.
-
-If an actual scheduling service is available, set `VITE_MEETING_URL` to its HTTPS booking URL and rebuild. The page will add an external calendar link while retaining the meeting-request form. This value is public and must not contain a private access token. No scheduling link has been supplied, so the request form is the active option.
+Email is not active in the public interface. The retained email helper targets project@cws.com for future use, but must only be reconnected after mailbox provisioning, FormSubmit activation and an actual delivery test. No automatic sending or WhatsApp Business API integration is claimed.
 
 ## Preserved data and retired backend
 
@@ -57,6 +42,6 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-Browser tests launch only Vite, use simulated email-provider responses and check public navigation, retired routes, form acceptance/error handling, meeting details, mobile layout, imagery and clickable cards. On Windows, `PLAYWRIGHT_EXECUTABLE_PATH` can select an installed Edge/Chromium executable.
+Browser tests launch only Vite, intercept WhatsApp opening without sending messages and check public navigation, retired routes, validation, blocked-popup fallback, scheduling details, mobile layout, imagery and clickable cards. On Windows, `PLAYWRIGHT_EXECUTABLE_PATH` can select an installed Edge/Chromium executable.
 
 The original PRD and historical documents reflect earlier scope. This README and `docs/PUBLIC-WEBSITE.md` describe the approved public-only version. No public production deployment is included.
