@@ -1,0 +1,8 @@
+/services/workflow-automation /services/ai-agents-and-automation 301
+/login /contact 301
+/signup /contact 301
+/verify /contact 301
+/portal/* /contact 301
+/admin/* /contact 301
+/preview/* /contact 301
+/* /index.html 200

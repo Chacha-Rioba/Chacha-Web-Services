@@ -1,0 +1,31 @@
+import React,{useState} from 'react';
+import {Link,useSearchParams} from 'react-router-dom';
+import {CalendarDays,MessageCircle,PhoneCall} from 'lucide-react';
+import {services,packages} from '../shared/catalog.js';
+import {whatsappInquiry,localDate} from '../shared/inquiry.js';
+const zone=()=>{try{return Intl.DateTimeFormat().resolvedOptions().timeZone||'Africa/Nairobi'}catch{return 'Africa/Nairobi'}};
+export default function Inquiry({mode='project'}){
+ const[params]=useSearchParams(),[error,setError]=useState(''),[ready,setReady]=useState('');
+ const meeting=mode==='meeting',contact=mode==='contact',callback=mode==='callback',scheduled=meeting||callback;
+ const kind=callback?'Callback request':meeting?'Meeting request':contact?'General inquiry':'Project inquiry';
+ const initialService=services.some(s=>s[0]===params.get('service'))?params.get('service'):'Need guidance';
+ const initialPackage=packages.some(p=>p.name===params.get('package'))?params.get('package'):'Not sure yet';
+ function submit(e){e.preventDefault();setError('');try{const url=whatsappInquiry(Object.fromEntries(new FormData(e.currentTarget)),kind);setReady(url);window.open(url,'_blank','noopener,noreferrer')}catch(e){setError(e.message)}}
+ return <section className="inquiry-page section"><div className="inquiry-intro"><span className="cloud-kicker">A DIRECT CONVERSATION</span><h1>{callback?<>Let’s talk about<br/><em>your next move.</em></>:meeting?<>Good ideas start<br/>with a <em>conversation.</em></>:contact?<>Tell us what<br/>you’re <em>thinking.</em></>:<>Tell us what<br/>you want to <em>build.</em></>}</h1><p>{callback?'Leave your number and preferred time. Continue to WhatsApp to request a callback from CWS.':'Share a few details, then continue to WhatsApp to send your request directly to CWS.'}</p></div>
+ <div className="inquiry-layout"><aside className="inquiry-aside"><img src={'/images/sections/'+mode+'.jpg'} alt={callback?'Person using a phone beside a laptop':meeting?'People discussing a project at a table':contact?'A professional handshake':'Professional working at a laptop'} width="1800" height="1200"/><div><h2>A real conversation.<br/>A useful next step.</h2><p>We’ll discuss your goals, the right approach and a clear scope before any paid work begins.</p><a href="https://wa.me/254710885507"><MessageCircle size={18}/>WhatsApp CWS</a>{!callback&&<Link to="/request-a-callback"><PhoneCall size={18}/>Request a callback</Link>}{!meeting&&<Link to="/book-a-meeting"><CalendarDays size={18}/>Book a meeting</Link>}<div className="inquiry-steps"><span>01 · Tell us what matters</span><span>02 · Tap Send in WhatsApp</span><span>03 · Agree the next step</span></div></div></aside>
+ <div className="inquiry-main"><form className="inquiry-form" onSubmit={submit} onChange={()=>{setReady('');setError('')}} aria-label={kind}><span className="cloud-kicker">{kind.toUpperCase()}</span><h2>{callback?'When can we call you?':meeting?'Find a time to talk.':contact?'How can we help?':'Your project, in your words.'}</h2><p>{scheduled?'Choose your preferred time. CWS will confirm availability on WhatsApp.':'No account, no payment and no long application.'}</p><fieldset><div className="inquiry-fields">
+ <label>Your name<input name="name" autoComplete="name" required minLength={2} maxLength={100}/></label>
+ <label>Email address <small>(optional)</small><input name="email" type="email" autoComplete="email" maxLength={254}/></label>
+ <label>Company <small>(optional)</small><input name="company" autoComplete="organization" maxLength={150}/></label>
+ <label>{callback?'Callback number (with country code)':'Phone number (optional)'}<input name="phone" type="tel" autoComplete="tel" required={callback} maxLength={30} placeholder={callback?'+ country code and number':''}/></label>
+ <label className="full">Service<select aria-label="Service" name="service" defaultValue={initialService}><option>Need guidance</option>{services.map(([name])=><option key={name}>{name}</option>)}</select></label>
+ {!scheduled&&!contact&&<label className="full">Starting package<select aria-label="Starting package" name="package" defaultValue={initialPackage}><option>Not sure yet</option>{packages.map(p=><option key={p.name}>{p.name}</option>)}</select></label>}
+ {scheduled&&<><label>Preferred date<input name="preferred_date" type="date" min={localDate()} required/></label><label>Preferred time<input name="preferred_time" type="time" required/></label><label className="full">Time zone<input name="time_zone" list="meeting-zones" defaultValue={zone()} required maxLength={100}/><datalist id="meeting-zones">{['Africa/Nairobi','Africa/Lagos','Europe/London','America/New_York','Asia/Dubai','UTC'].map(z=><option key={z} value={z}/>)}</datalist></label><label className="full">Alternative dates or times <small>(optional)</small><input name="alternative_times" maxLength={500}/></label></>}
+ <label className="full">{scheduled?'What would you like to discuss?':contact?'Your message':'Project requirements'}<textarea name="message" required minLength={20} maxLength={4000} rows={5} placeholder="Tell us about your business and what you need help with."/></label></div>
+ <label className="form-trap" aria-hidden="true">Leave this field empty<input name="_honey" tabIndex={-1} autoComplete="off"/></label><label className="check-label"><input name="privacy" type="checkbox" required/>I have read the <Link to="/privacy">privacy notice</Link> and agree to be contacted about this request.</label>
+ <p className="inquiry-disclosure">Your details will open in WhatsApp as a ready-to-send message. Tap Send there to complete your request. Please don’t include passwords or confidential information.</p>
+ <button className="button whatsapp-submit" type="submit"><MessageCircle size={18}/>Continue to WhatsApp</button></fieldset>
+ {error&&<div role="alert" className="error-summary">{error}</div>}
+ {ready&&<div className="whatsapp-handoff" role="status"><h3>Your message is ready—not yet sent.</h3><p>Tap <b>Send in WhatsApp</b> to share your request with CWS. If WhatsApp did not open, use the link below. Your details remain here to edit.</p>{scheduled&&<p>This is a request, not a confirmed appointment. CWS will confirm availability.</p>}<a href={ready} target="_blank" rel="noopener noreferrer">Open WhatsApp CWS</a></div>}
+ </form></div></div></section>
+}
